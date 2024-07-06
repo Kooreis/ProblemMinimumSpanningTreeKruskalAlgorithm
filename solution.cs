@@ -1,31 +1,13 @@
-class UnionFind {
-    constructor(elements) {
-        this.count = elements.length;
-        this.parent = {};
-        elements.forEach(e => (this.parent[e] = e));
-    }
-
-    union(a, b) {
-        let rootA = this.find(a);
-        let rootB = this.find(b);
-        if (rootA === rootB) return;
-        if (rootA < rootB) {
-            if (this.parent[b] != b) this.union(this.parent[b], a);
-            this.parent[b] = this.parent[a];
-        } else {
-            if (this.parent[a] != a) this.union(this.parent[a], b);
-            this.parent[a] = this.parent[b];
+function kruskal(nodes, edges) {
+    let unionFind = new UnionFind(nodes);
+    let mst = [];
+    edges.sort((a, b) => a[2] - b[2]);
+    for (let i = 0; i < edges.length; i++) {
+        let edge = edges[i];
+        if (!unionFind.connected(edge[0], edge[1])) {
+            unionFind.union(edge[0], edge[1]);
+            mst.push(edge);
         }
     }
-
-    find(a) {
-        while (this.parent[a] !== a) {
-            a = this.parent[a];
-        }
-        return a;
-    }
-
-    connected(a, b) {
-        return this.find(a) === this.find(b);
-    }
+    return mst;
 }
